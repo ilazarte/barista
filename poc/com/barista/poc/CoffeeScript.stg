@@ -1,0 +1,64 @@
+group CoffeeScriptReflect;
+
+staticModifier ::= [
+	"static":"@",
+	default:""
+]
+
+text(val) ::= "<val.text>"
+
+compilationUnit(self) ::= "<self.typeDeclaration:typeDeclaration(self.packageDeclaration)>"
+
+packageDeclaration(self) ::= "<qualifiedName(self.qualifiedName)>"
+
+qualifiedName(self) ::= "<self.Identifier; separator=\".\">"
+
+typeDeclaration(self, pkg) ::= "<self.classDeclaration:classDeclaration(pkg)>"
+
+classDeclaration(self, pkg) ::= "class <packageDeclaration(pkg)>.<self.Identifier><self.classBody:classBody()>"
+
+classBody(self) ::= "<self.classBodyDeclaration:classBodyDeclaration()>"
+
+classBodyDeclaration(self) ::= "<\n><\n>  <self.modifier:memberModifier()><self.memberDeclaration:memberDeclaration()>"
+
+memberModifier(self) ::= "<staticModifier.(self.text)>"
+
+memberDeclaration(self) ::= <%
+	<if(self.methodDeclaration)><self.methodDeclaration:methodDeclaration()>
+	<elseif(self.fieldDeclaration)><self.fieldDeclaration:fieldDeclaration()>
+	<else>Unsupported declaration
+	<endif>
+%>
+
+methodDeclaration(self) ::= "<self.Identifier>: (<self.formalParameters.formalParameterList:formalParameterList()>) -><\n>    <self.methodBody:methodBody()>"
+
+formalParameterList(self) ::= "<[self.formalParameter, self.lastFormalParameter]:methodParameter(); separator=\", \">"
+
+methodParameter(self) ::= "<self.variableDeclaratorId.Identifier>"
+
+methodBody(self) ::= "<self.block.blockStatement:blockStatement()>"
+
+blockStatement(self) ::= <%
+	<self.localVariableDeclarationStatement.localVariableDeclaration:localVariableDeclaration()>
+	<self.statement:statement()>
+%>
+
+statement(self) ::= "<self.text>"
+
+localVariableDeclaration(self) ::= "<self.variableDeclarators.variableDeclarator:variableDeclarator()>"
+
+variableDeclarator(self) ::= <%
+	<self.variableDeclaratorId.Identifier> = 
+	<if(self.variableInitializer)><self.variableInitializer.text>
+	<else>null
+	<endif><\n>    
+%>
+
+fieldDeclaration(self) ::= "<self.variableDeclarators.variableDeclarator:fieldDeclarator(); separator=\"\n  \">"
+
+fieldDeclarator(self) ::= <%
+	<self.variableDeclaratorId.Identifier>: 
+	<if(self.variableInitializer)><self.variableInitializer.text>
+	<else>null
+	<endif>
+%>
