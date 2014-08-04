@@ -1,13 +1,14 @@
 ## Barista
 
 Barista compiles Java source code to Javascript via CoffeeScript (phew).
-It current gets as far as CoffeeScript and there is a lot left to do.
-Some stuff it does already are a lot of statements, expressions, vars, classes fields, some static references class definitions.  Sounds like a lot, but there is a world of minor edge cases I'm sure a serious user will uncover.
+It currently gets as far as CoffeeScript and there is a lot left to do.
+Syntactically it does alot already - statements, expressions, local vars, classes, fields, some support for statics.  
+Unfortunately there are lot of edge cases, and a serious Java user would probably find compilation issues quickly.
 Thankfully antlr makes this relatively easy to find and deal with, just have to do the work.
 
-As a learning expression, fun stuff has been rewriting Javas for expressions in terms of CoffeeScripts while and switch statements in terms of CoffeeScript if elses since CS's does not offer fall through - yes I wanted to keep that feature :)
+As a learning experience, fun stuff has been rewriting Java for expressions in terms of CoffeeScripts while and switch statements in terms of CoffeeScript if elses.  The latter was done to preserve the switch statement fall through - yes I wanted to keep that feature as it would be nice to port legacy Java people might have.
 
-## What, why CoffeeScript?
+## Why CoffeeScript?
 
 Reusing the class mechanism is a nice thing to have, plus CoffeeScript is syntactically a very easy target.
 Personally I prefer CoffeeScript to Javascript as a language so stopping at the intermediate step is also attractice.
